@@ -1,4 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--<LinearLayout-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--tools:context=".MainActivity">-->
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/linearLayout1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<android.widget.Toolbar-->
+            <!--android:id="@+id/toolbar2"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="?attr/colorPrimary"-->
+            <!--android:minHeight="?attr/actionBarSize"-->
+            <!--android:theme="?attr/actionBarTheme" />-->
+
+        <!--<fragment-->
+            <!--android:id="@+id/neigh_list"-->
+            <!--class="com.example.elukapo.wifidirect.NeighbourListFragment"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+            <!--&lt;!&ndash; Preview: layout=@layout/row_devices &ndash;&gt;-->
+        <!--</fragment>-->
+
+        <!--<fragment-->
+            <!--android:id="@+id/neigh_detail"-->
+            <!--class="com.example.elukapo.wifidirect.NeighbourDetailFragment"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+            <!--&lt;!&ndash; Preview: layout=@layout/device_detail &ndash;&gt;-->
+        <!--</fragment>-->
+    <!--</LinearLayout>-->
+<!--</LinearLayout>-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
@@ -12,10 +51,13 @@
         android:orientation="vertical"
         android:id="@+id/linearlayout1"
         >
-        <Toolbar
+        <android.widget.Toolbar
             android:id="@+id/toolbar1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme" />
         <fragment
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

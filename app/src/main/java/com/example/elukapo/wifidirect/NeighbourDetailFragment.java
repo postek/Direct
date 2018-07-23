@@ -173,4 +173,18 @@ public class NeighbourDetailFragment extends Fragment implements WifiP2pManager.
         view = (TextView) mContentView.findViewById(R.id.device_info);
         view.setText(device.toString());
     }
+
+    public void resetViews() {
+        mContentView.findViewById(R.id.btn_connect).setVisibility(View.VISIBLE);
+        TextView view = (TextView) mContentView.findViewById(R.id.device_address);
+        view.setText(R.string.empty);
+        view = (TextView) mContentView.findViewById(R.id.device_info);
+        view.setText(R.string.empty);
+        view = (TextView) mContentView.findViewById(R.id.group_owner);
+        view.setText(R.string.empty);
+        view = (TextView) mContentView.findViewById(R.id.status_text);
+        view.setText(R.string.empty);
+        mContentView.findViewById(R.id.btn_start_client).setVisibility(View.GONE);
+        this.getView().setVisibility(View.GONE);
+    }
 }

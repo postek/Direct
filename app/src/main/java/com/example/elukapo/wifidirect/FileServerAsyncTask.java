@@ -22,10 +22,6 @@ import static com.example.elukapo.wifidirect.TransferService.copyFile;
 class FileServerAsyncTask extends AsyncTask<Void, Void, String> {
     private Context context;
     private TextView statusText;
-    /**
-     * @param context
-     * @param statusText
-     */
     public FileServerAsyncTask(Context context, View statusText) {
         this.context = context;
         this.statusText = (TextView) statusText;
@@ -64,10 +60,6 @@ class FileServerAsyncTask extends AsyncTask<Void, Void, String> {
             context.startActivity(intent);
         }
     }
-    /*
-     * (non-Javadoc)
-     * @see android.os.AsyncTask#onPreExecute()
-     */
     @Override
     protected void onPreExecute() {
         statusText.setText("Opening a server socket");

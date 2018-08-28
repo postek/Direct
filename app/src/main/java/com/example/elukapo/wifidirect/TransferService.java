@@ -34,37 +34,17 @@ public class TransferService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(MainActivity.TAG, "1");
-
         Context context = getApplicationContext();
-        Log.d(MainActivity.TAG, "2");
-
         if (intent.getAction().equals(ACTION_SEND_FILE)) {
-            Log.d(MainActivity.TAG, "3");
-
             String fileUri = intent.getExtras().getString(EXTRAS_FILE_PATH);
             String host = intent.getExtras().getString(EXTRAS_GROUP_OWNER_ADDRESS);
             int port = intent.getExtras().getInt(EXTRAS_GROUP_OWNER_PORT);
-            Log.d(MainActivity.TAG, "4");
-
             Socket socket = new Socket();
-            Log.d(MainActivity.TAG, "5");
-
             try {
-                Log.d(MainActivity.TAG, "Opening client socket - ");
                 socket.bind(null);
                 socket.connect((new InetSocketAddress(host, port)), SOCKET_TIMEOUT);
-                Log.d(MainActivity.TAG, "Client socket - " + socket.isConnected());
                 OutputStream stream = socket.getOutputStream();
-//                DataOutputStream mDataOutputStream = new DataOutputStream(socket.getOutputStream());
-//                mDataOutputStream.writeUTF("ala ma kota");
-//                mDataOutputStream.flush();
                 DataInputStream inputStream = new DataInputStream(socket.getInputStream());
-                String przyszloOdServera = inputStream.readUTF();
-                Log.d(MainActivity.TAG, "Przyszlo od servera " + przyszloOdServera);
-
-/*                Toast.makeText(context,
-                        przyszloOdServera, Toast.LENGTH_SHORT).show();*/
                 ContentResolver cr = context.getContentResolver();
                 InputStream is = null;
                 try {
@@ -73,7 +53,6 @@ public class TransferService extends IntentService {
                     Log.d(MainActivity.TAG, e.toString());
                 }
                 copyFile(is, stream);
-                Log.d(MainActivity.TAG, "Client: Data written");
             } catch (IOException e) {
                 Log.e(MainActivity.TAG, e.getMessage());
             } finally {
@@ -82,7 +61,6 @@ public class TransferService extends IntentService {
                         try {
                             socket.close();
                         } catch (IOException e) {
-                            // Give up
                             e.printStackTrace();
                         }
                     }

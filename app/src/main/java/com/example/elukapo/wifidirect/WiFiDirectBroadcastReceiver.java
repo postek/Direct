@@ -12,7 +12,6 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver{
     private WifiP2pManager manager;
     private WifiP2pManager.Channel channel;
     private MainActivity activity;
-
     public WiFiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel,
                                        MainActivity activity) {
         super();
@@ -20,8 +19,6 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver{
         this.channel = channel;
         this.activity = activity;
     }
-
-
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();

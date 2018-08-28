@@ -41,19 +41,19 @@ public class NeighbourListFragment extends ListFragment implements WifiP2pManage
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        WifiP2pDevice device = (WifiP2pDevice) getListAdapter().getItem(position); // listAdapter to interfejs laczący listView z danymi go wypelniającymi
+        WifiP2pDevice device = (WifiP2pDevice) getListAdapter().getItem(position);
         ((DeviceActionListener) getActivity()).showDetails(device);
     }
 
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
-        if (progressDialog != null && progressDialog.isShowing()) { // jak mamy update to wywal okno dialogowe
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-        peers.clear(); // wyczysc peery
-        peers.addAll(peerList.getDeviceList()); // doodaj nowa peery
+        peers.clear();
+        peers.addAll(peerList.getDeviceList());
         ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
-        if (peers.size() == 0) { // gdy nie dodajemy zadnych peerow mowimy ze nic nie znalezlismy
+        if (peers.size() == 0) {
             Log.d(MainActivity.TAG, "No devices found");
             return;
         }
@@ -64,10 +64,11 @@ public class NeighbourListFragment extends ListFragment implements WifiP2pManage
         ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
     }
     public void onInitiateDiscovery() {
-        if (progressDialog != null && progressDialog.isShowing()) { // gdy wywolujemy discovery wywalamy to co bylo i tworzymy nowe
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-        progressDialog = ProgressDialog.show(getActivity(), "Press back to cancel", "finding peers", true,
+        progressDialog = ProgressDialog.show(getActivity(),
+                "Press back to cancel", "finding peers", true,
                 true, new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
@@ -83,9 +84,7 @@ public class NeighbourListFragment extends ListFragment implements WifiP2pManage
         view = (TextView) mContentView.findViewById(R.id.my_status);
         view.setText(getDeviceStatus(device.status));
     }
-    public WifiP2pDevice getDevice() { // zwraca urzadzenie
-        return device;
-    }
+
     private static String getDeviceStatus(int status) {
         Log.d(MainActivity.TAG, "Peer status :" + status);
         switch (status) {
@@ -112,9 +111,8 @@ public class NeighbourListFragment extends ListFragment implements WifiP2pManage
             super(context, textViewResourceId, objects);
             items = objects;
         }
-
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) { //zwracamy widok na podstawie listy urzadzen jaka aktualnie mamy
+        public View getView(int position, View convertView, ViewGroup parent) {
             View v = convertView;
             if (v == null) {
                 LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(

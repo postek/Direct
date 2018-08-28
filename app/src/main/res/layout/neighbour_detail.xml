@@ -22,11 +22,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/connect_peer_button" />
             <Button
-                android:id="@+id/btn_createGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/create_Group_button" />
-            <Button
                 android:id="@+id/btn_disconnect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,5 +68,4 @@
             </TextView>
         </LinearLayout>
     </LinearLayout>
-
 </FrameLayout>

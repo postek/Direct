@@ -27,15 +27,12 @@ class FileServerAsyncTask extends AsyncTask<Void, Void, String> {
     private Context context;
     private TextView statusText;
     String s;
-    Handler myHandler;
 
-    public FileServerAsyncTask(Context context, View statusText, Handler myHandler) {
+    public FileServerAsyncTask(Context context, View statusText) {
         this.context = context;
         this.statusText = (TextView) statusText;
-        this.myHandler = myHandler;
     }
 
-    
     @Override
     protected String doInBackground(Void... params) {
         try {

@@ -46,27 +46,22 @@ public class MainActivity extends Activity implements DeviceActionListener, Wifi
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_DISCOVERY_CHANGED_ACTION);
     }
-
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_items, menu);
         return true;
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         receiver = new WiFiDirectBroadcastReceiver(manager, channel, this);
         registerReceiver(receiver, intentFilter);
-
     }
-
     @Override
     protected void onPause() {
         super.onPause();
         unregisterReceiver(receiver);
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
@@ -103,38 +98,33 @@ public class MainActivity extends Activity implements DeviceActionListener, Wifi
                     return super.onOptionsItemSelected(item);
         }
     }
-
     public void setIsWifiP2pEnabled(boolean isWifiP2pEnabled) {
         this.isWifiP2pEnabled = isWifiP2pEnabled;
     }
-
     public void resetData() {
-        NeighbourListFragment fragmentList = (NeighbourListFragment) getFragmentManager() // obiekt klasy fragmentList - uchwyt do frag_list
+        NeighbourListFragment fragmentList = (NeighbourListFragment) getFragmentManager()
                 .findFragmentById(R.id.neigh_list);
-        NeighbourDetailFragment fragmentDetails = (NeighbourDetailFragment) getFragmentManager() // obiekt klasy detailsFragment - uchwyt do frag_detail
+        NeighbourDetailFragment fragmentDetails = (NeighbourDetailFragment) getFragmentManager()
                 .findFragmentById(R.id.neigh_detail);
         if (fragmentList != null) {
-            fragmentList.clearPeers(); // czyszczenie listy w razie gdy nie jest pusta
+            fragmentList.clearPeers();
         }
         if (fragmentDetails != null) {
-            fragmentDetails.resetViews(); // czyszczenie szczegułów w razie gdy nie są puste
+            fragmentDetails.resetViews();
         }
     }
-
     @Override
     public void showDetails(WifiP2pDevice device) {
         NeighbourDetailFragment fragment = (NeighbourDetailFragment) getFragmentManager()
-                .findFragmentById(R.id.neigh_detail); // uchwyt do frag_detail
+                .findFragmentById(R.id.neigh_detail);
         fragment.setDetails(device);
     }
-
     @Override
     public void connect(WifiP2pConfig config) {
         manager.connect(channel, config, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
             }
-
             @Override
             public void onFailure(int reason) {
                 Toast.makeText(MainActivity.this, "Connect failed. Retry.",
@@ -142,59 +132,22 @@ public class MainActivity extends Activity implements DeviceActionListener, Wifi
             }
         });
     }
-
-    @Override
-    public void createGroup() {
-        manager.createGroup(channel, new WifiP2pManager.ActionListener() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(MainActivity.this, "Group created.",
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(int reason) {
-                Toast.makeText(MainActivity.this, "Group not created with code: " + reason,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     @Override
     public void disconnect() {
-        final NeighbourDetailFragment fragment = (NeighbourDetailFragment) getFragmentManager().findFragmentById(R.id.neigh_detail);
+        final NeighbourDetailFragment fragment =
+                (NeighbourDetailFragment) getFragmentManager().findFragmentById(R.id.neigh_detail);
         fragment.resetViews();
-        deletePersistentGroup(manager,channel);
         manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 fragment.getView().setVisibility(View.GONE);
             }
-
             @Override
             public void onFailure(int reason) {
                 Log.d(TAG, "Disconnect failed. Reason :" + reason);
             }
         });
     }
-
-    public static void deletePersistentGroup(WifiP2pManager manager, WifiP2pManager.Channel channel) {
-        try {
-            Method method = WifiP2pManager.class.getMethod("deletePersistentGroup",
-                    WifiP2pManager.Channel.class, int.class, WifiP2pManager.ActionListener.class);
-
-            for (int netId = 0; netId < 32; netId++) {
-                method.invoke(manager, channel, netId, null);
-            }
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onChannelDisconnected() {
         if(manager != null && !retryChannel) {

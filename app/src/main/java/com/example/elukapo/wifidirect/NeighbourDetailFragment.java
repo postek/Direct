@@ -30,19 +30,12 @@ public class NeighbourDetailFragment extends Fragment implements WifiP2pManager.
     ProgressDialog progressDialog = null;
     protected static final int CHOOSE_FILE_RESULT_CODE = 20;
     private WifiP2pInfo info;
-    private Client client;
-    private FileServerAsyncTask server;
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
         if (progressDialog != null && progressDialog.isShowing()) {
         progressDialog.dismiss();
         }
-        Handler myHandler = new Handler() {
-            public void handleMessage(Message msg) {
-                Log.d(MainActivity.TAG, (String)msg.obj);
-            }
-        };
         this.info = info;
         this.getView().setVisibility(View.VISIBLE);
         TextView view = (TextView) mContentView.findViewById(R.id.group_owner);
@@ -52,18 +45,16 @@ public class NeighbourDetailFragment extends Fragment implements WifiP2pManager.
         view = (TextView) mContentView.findViewById(R.id.device_info);
         view.setText("Group Owner IP - " + info.groupOwnerAddress.getHostAddress());
         if (info.groupFormed && info.isGroupOwner) {
-            server = (FileServerAsyncTask) new FileServerAsyncTask(getActivity(), mContentView.findViewById(R.id.status_text), myHandler);
-            server.execute();
+            new FileServerAsyncTask(getActivity(), mContentView.findViewById(R.id.status_text))
+                    .execute();
             ((LinearLayout) mContentView.findViewById(R.id.status_bar)).setVisibility(View.VISIBLE);
         } else if (info.groupFormed) {
             mContentView.findViewById(R.id.btn_start_client).setVisibility(View.VISIBLE);
             ((LinearLayout) mContentView.findViewById(R.id.status_bar)).setVisibility(View.VISIBLE);
-            ((TextView) mContentView.findViewById(R.id.status_text)).setText(getResources()
+            ((TextView) mContentView.findViewById(R.id.status_text))
+                    .setText(getResources()
                     .getString(R.string.client_text));
-            client = new Client(info.groupOwnerAddress.getHostAddress(),8988, myHandler);
-            client.execute();
         }
-        // hide the connect button
         mContentView.findViewById(R.id.btn_connect).setVisibility(View.GONE);
     }
 
@@ -75,15 +66,14 @@ public class NeighbourDetailFragment extends Fragment implements WifiP2pManager.
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        mContentView = inflater.inflate(R.layout.neighbour_detail, null); // wdrazanie widoku
+        mContentView = inflater.inflate(R.layout.neighbour_detail, null);
         mContentView.findViewById(R.id.btn_connect).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { //ustawianie funkcji na klikniecie connect
+            public void onClick(View v) {
                 WifiP2pConfig config = new WifiP2pConfig();
-                config.deviceAddress = device.deviceAddress;//podanie adresu do polaczenia
-                config.wps.setup = WpsInfo.PBC; // ustawienie sposobu zgody na polaczenie
-                config.groupOwnerIntent = 0;
-                if (progressDialog != null && progressDialog.isShowing()) {// uaktualnij progresDialog
+                config.deviceAddress = device.deviceAddress;
+                config.wps.setup = WpsInfo.PBC;
+                if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
                 progressDialog = ProgressDialog.show(getActivity(), "Press back to cancel",
@@ -99,32 +89,19 @@ public class NeighbourDetailFragment extends Fragment implements WifiP2pManager.
                         ((DeviceActionListener) getActivity()).disconnect();
                     }
                 });
-        mContentView.findViewById(R.id.btn_createGroup).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ((DeviceActionListener) getActivity()).createGroup();
-//                        server.sendMsg();
-                    }
-                });
         mContentView.findViewById(R.id.btn_start_client).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Allow user to pick an image from Gallery or other
-                        // registered apps
                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                         intent.setType("image/*");
                         startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
                     }
                 });
         return mContentView;
-
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // User has picked an image. Transfer it to group owner i.e peer using
-        // FileTransferService.
         if (data != null) {
             android.net.Uri uri = data.getData();
             TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
@@ -137,32 +114,8 @@ public class NeighbourDetailFragment extends Fragment implements WifiP2pManager.
                     info.groupOwnerAddress.getHostAddress());
             serviceIntent.putExtra(TransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
             getActivity().startService(serviceIntent);
-            Log.d(MainActivity.TAG, "end of onActivResult");
-
         } else {
             return;
-        }
-    }
-
-    public WifiP2pDevice getDevice() { // zwraca urzadzenie
-        return device;
-    }
-
-    private static String getDeviceStatus(int status) {
-        Log.d(MainActivity.TAG, "Peer status :" + status);
-        switch (status) {
-            case WifiP2pDevice.AVAILABLE:
-                return "Available";
-            case WifiP2pDevice.INVITED:
-                return "Invited";
-            case WifiP2pDevice.CONNECTED:
-                return "Connected";
-            case WifiP2pDevice.FAILED:
-                return "Failed";
-            case WifiP2pDevice.UNAVAILABLE:
-                return "Unavailable";
-            default:
-                return "Unknown";
         }
     }
 

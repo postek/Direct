@@ -6,6 +6,5 @@ import android.net.wifi.p2p.WifiP2pDevice;
 public interface DeviceActionListener {
     void showDetails(WifiP2pDevice device);
     void connect(WifiP2pConfig config);
-    void createGroup();
     void disconnect();
 }
